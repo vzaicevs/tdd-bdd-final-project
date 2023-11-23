@@ -104,7 +104,37 @@ def step_impl(context, element_name):
 # to get the element id of any button
 ##################################################################
 
-## UPDATE CODE HERE ##
+@when('I press the "{element_name}" button')
+def step_impl(context,element_name):
+    element_id = element_name.lower().replace(' ', '_') + "-btn"
+    element = context.driver.find_element(By.ID, element_id)
+    element.click()
+
+@then('I should see the message "{text_string}"')
+def step_impl(context, text_string):
+    """ Check the flash_message """
+    element_id = "flash_message"
+    element = WebDriverWait(context.driver, context.wait_seconds).until(
+        expected_conditions.visibility_of_element_located((By.ID, element_id))
+    )
+    #context.driver.save_screenshot(f'message-{text_string}.png')
+    assert(text_string.lower() in element.text.lower())
+
+@then('I should see "{text_string}" in the results')
+def step_impl(context, text_string):
+    element_id = "search_results"
+    element = WebDriverWait(context.driver, context.wait_seconds).until(
+        expected_conditions.visibility_of_element_located((By.ID, element_id))
+    )
+    assert(text_string.lower() in element.text.lower())
+
+@then('I should not see "{text_string}" in the results')
+def step_impl(context, text_string):
+    element_id = "search_results"
+    element = WebDriverWait(context.driver, context.wait_seconds).until(
+        expected_conditions.visibility_of_element_located((By.ID, element_id))
+    )
+    assert(text_string.lower() not in element.text.lower())
 
 ##################################################################
 # This code works because of the following naming convention:
